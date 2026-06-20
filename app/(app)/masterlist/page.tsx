@@ -258,13 +258,17 @@ export default function MasterlistPage() {
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem" }}>
-          <button className="btn btn-secondary btn-sm" style={{ gap: "0.375rem" }}>
-            <Link2 size={15} />
-            {copy.masterlist.save_link[lang]}
-          </button>
-          <button className="btn btn-primary btn-sm" style={{ gap: "0.375rem" }}>
+          <button 
+            className="border border-gray-200 text-gray-700 hover:bg-gray-50 px-3.5 py-1.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 bg-white"
+          >
             <Plus size={15} />
-            {copy.masterlist.new_folder[lang]}
+            {lang === "bm" ? "Folder Baru" : "New Folder"}
+          </button>
+          <button 
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 shadow-sm"
+          >
+            <Plus size={15} />
+            {lang === "bm" ? "Muat Naik Fail" : "Upload File"}
           </button>
         </div>
       </div>
@@ -311,79 +315,33 @@ export default function MasterlistPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-            gap: "0.875rem",
+            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+            gap: "1rem",
           }}
         >
           {filteredFolders.map((folder) => (
             <button
               key={folder.id}
-              className={`folder-card ${folder.colorClass}`}
               onClick={() => setActiveFolder(folder)}
+              className="bg-gray-50 border border-gray-100 rounded-2xl p-6 transition-all duration-300 ease-in-out cursor-pointer group hover:bg-blue-600 hover:shadow-lg hover:-translate-y-1 text-left w-full flex flex-col justify-between"
               style={{
-                padding: "1.25rem 1rem",
-                border: "none",
-                textAlign: "left",
-                width: "100%",
                 aspectRatio: "1 / 0.85",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
               }}
             >
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-                <FolderOpen size={24} style={{ opacity: 0.9 }} />
-                <ChevronRight size={16} style={{ opacity: 0.6 }} />
+              <div className="flex items-start justify-between w-full mb-4">
+                <FolderOpen size={24} className="text-gray-400 group-hover:text-white transition-colors" />
+                <ChevronRight size={16} className="text-gray-400 group-hover:text-white/60 transition-colors" />
               </div>
               <div>
-                <div
-                  style={{
-                    fontSize: "0.9rem",
-                    fontWeight: 700,
-                    lineHeight: 1.3,
-                    marginBottom: "0.25rem",
-                  }}
-                >
+                <div className="text-gray-900 group-hover:text-white font-semibold text-sm transition-colors mb-1">
                   {folder.name}
                 </div>
-                <div style={{ fontSize: "0.725rem", opacity: 0.75 }}>
+                <div className="text-gray-500 group-hover:text-blue-100 text-xs transition-colors">
                   {folder.resourceCount} {copy.masterlist.resources[lang]}
                 </div>
               </div>
             </button>
           ))}
-
-          {/* Add folder card */}
-          <button
-            style={{
-              aspectRatio: "1 / 0.85",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-              background: "var(--color-surface)",
-              border: "1.5px dashed var(--color-border-strong)",
-              borderRadius: "var(--radius-lg)",
-              cursor: "pointer",
-              color: "var(--color-text-muted)",
-              transition: "all var(--transition-fast)",
-              width: "100%",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--color-primary)";
-              (e.currentTarget as HTMLButtonElement).style.color = "var(--color-primary)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--color-border-strong)";
-              (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-muted)";
-            }}
-          >
-            <Plus size={22} />
-            <span style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-              {copy.masterlist.new_folder[lang]}
-            </span>
-          </button>
         </div>
       )}
 
@@ -397,22 +355,9 @@ export default function MasterlistPage() {
             {MOCK_RESOURCES.slice(0, 4).map((resource) => (
               <div
                 key={resource.id}
+                className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl cursor-pointer hover:bg-gray-50/80 transition-colors"
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
                   padding: "0.75rem 1rem",
-                  background: "var(--color-surface)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--radius-md)",
-                  cursor: "pointer",
-                  transition: "border-color var(--transition-fast)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "var(--color-border-strong)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "var(--color-border)";
                 }}
               >
                 <div
@@ -450,7 +395,50 @@ export default function MasterlistPage() {
                     {MOCK_FOLDERS.find((f) => f.id === resource.folderId)?.name}
                   </div>
                 </div>
-                <MoreVertical size={16} color="var(--color-text-muted)" />
+
+                {/* Quick Actions Group */}
+                <div className="flex items-center gap-1 mr-1">
+                  {resource.type === "link" ? (
+                    <button 
+                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                      title={lang === "bm" ? "Salin Pautan" : "Copy Link"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Copy size={15} />
+                    </button>
+                  ) : (
+                    <button 
+                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                      title={lang === "bm" ? "Muat Turun" : "Download"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Download size={15} />
+                    </button>
+                  )}
+                  
+                  <button 
+                    className="p-2 rounded-lg text-gray-400 hover:text-green-500 hover:bg-green-50 transition-colors"
+                    title={lang === "bm" ? "Kongsi WhatsApp" : "Share WhatsApp"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Share2 size={15} />
+                  </button>
+                </div>
+
+                <button 
+                  className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <MoreVertical size={16} />
+                </button>
               </div>
             ))}
           </div>
