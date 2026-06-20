@@ -259,13 +259,13 @@ export default function MasterlistPage() {
         </div>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button 
-            className="border border-gray-200 text-gray-700 hover:bg-gray-50 px-3.5 py-1.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 bg-white"
+            className="btn btn-secondary btn-sm"
           >
             <Plus size={15} />
             {lang === "bm" ? "Folder Baru" : "New Folder"}
           </button>
           <button 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 shadow-sm"
+            className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-none"
           >
             <Plus size={15} />
             {lang === "bm" ? "Muat Naik Fail" : "Upload File"}
@@ -323,17 +323,16 @@ export default function MasterlistPage() {
             <button
               key={folder.id}
               onClick={() => setActiveFolder(folder)}
-              className="bg-gray-50 border border-gray-100 rounded-2xl p-6 transition-all duration-300 ease-in-out cursor-pointer group hover:bg-blue-600 hover:shadow-lg hover:-translate-y-1 text-left w-full flex flex-col justify-between"
+              className="bg-white border border-gray-100 rounded-2xl p-6 transition-all duration-300 ease-in-out cursor-pointer group hover:bg-blue-600 hover:shadow-lg hover:-translate-y-1 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] text-left w-full flex flex-col justify-between"
               style={{
                 aspectRatio: "1 / 0.85",
               }}
             >
-              <div className="flex items-start justify-between w-full mb-4">
-                <FolderOpen size={24} className="text-gray-400 group-hover:text-white transition-colors" />
+              <div className="flex justify-end w-full mb-3">
                 <ChevronRight size={16} className="text-gray-400 group-hover:text-white/60 transition-colors" />
               </div>
               <div>
-                <div className="text-gray-900 group-hover:text-white font-semibold text-sm transition-colors mb-1">
+                <div className="text-gray-900 group-hover:text-white font-bold text-lg transition-colors mb-1 leading-snug">
                   {folder.name}
                 </div>
                 <div className="text-gray-500 group-hover:text-blue-100 text-xs transition-colors">
