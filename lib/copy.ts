@@ -17,9 +17,10 @@ export const copy = {
   // === NAV ===
   nav: {
     dashboard: { bm: "Papan Pemuka", en: "Dashboard" },
-    masterlist: { bm: "Senarai Utama", en: "Masterlist" },
-    subscriptions: { bm: "Langganan", en: "Subscriptions" },
-    products: { bm: "Produk", en: "Products" },
+    masterlist: { bm: "Resource Masterlist", en: "Resource Masterlist" },
+    subscriptions: { bm: "Subscription Tracker", en: "Subscription Tracker" },
+    products: { bm: "Product Catalog", en: "Product Catalog" },
+    analytics: { bm: "Analisis", en: "Analytics" },
     settings: { bm: "Tetapan", en: "Settings" },
   },
 

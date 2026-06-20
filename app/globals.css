@@ -62,7 +62,7 @@
 
   /* === BOTTOM NAV HEIGHT === */
   --bottom-nav-height: 72px;
-  --sidebar-width: 256px;
+  --sidebar-width: 280px;
 }
 
 /* ============================================
@@ -210,6 +210,7 @@ a:hover {
 
 .app-shell {
   display: flex;
+  gap: 0;
   min-height: 100dvh;
 }
 
@@ -225,26 +226,24 @@ a:hover {
   .main-content {
     margin-left: var(--sidebar-width);
     padding-bottom: 0;
+    padding-left: 0;
   }
 }
 
 .page-container {
   flex: 1;
   padding: 1.5rem 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   width: 100%;
-}
-
-@media (min-width: 768px) {
-  .page-container {
-    padding: 2rem 1.5rem;
-  }
 }
 
 @media (min-width: 1024px) {
   .page-container {
-    padding: 2rem 2.5rem;
+    padding-top: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 1.5rem;
   }
 }
 
@@ -772,14 +771,23 @@ label {
   left: 0;
   bottom: 0;
   width: var(--sidebar-width);
-  background: var(--color-surface);
-  border-right: 1px solid var(--color-border);
+  background: var(--color-dark);
+  border-right: none;
   display: flex;
   flex-direction: column;
   z-index: 100;
   overflow-y: auto;
   padding: 1.25rem 0.875rem;
   gap: 0.25rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 @media (max-width: 1023px) {
@@ -804,20 +812,20 @@ label {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   font-weight: 500;
   text-decoration: none;
 }
 
 .sidebar-item:hover {
-  background: var(--color-surface-raised);
-  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .sidebar-item.active {
-  background: var(--color-primary-muted);
-  color: var(--color-primary);
+  background: #ffffff;
+  color: #0c2656;
   font-weight: 600;
 }
 
@@ -826,8 +834,135 @@ label {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: rgba(255, 255, 255, 0.4);
   padding: 0.75rem 0.875rem 0.25rem;
+}
+
+/* ============================================
+   DASHBOARD SPLIT GRID & COLORED CARDS
+   ============================================ */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 2.2fr 1.1fr;
+    align-items: stretch;
+  }
+}
+
+.dashboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  height: 100%;
+}
+
+.dashboard-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  height: 100%;
+}
+
+.stat-card-colored {
+  position: relative;
+  transition: transform var(--transition-base);
+  padding: 1.25rem 1.5rem;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-card-colored:hover {
+  transform: translateY(-4px);
+}
+
+.stat-card-bg-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.08)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.04));
+  transition: filter var(--transition-base);
+}
+
+.stat-card-colored:hover .stat-card-bg-shadow {
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.12)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.06));
+}
+
+/* Card decorative shapes */
+.stat-card-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stat-card-blob-tr {
+  background: rgba(255, 255, 255, 0.15);
+  width: 130px;
+  height: 130px;
+  top: -30px;
+  right: -30px;
+  filter: blur(24px);
+}
+
+.stat-card-blob-bl {
+  background: rgba(255, 255, 255, 0.08);
+  width: 90px;
+  height: 90px;
+  bottom: -20px;
+  left: -20px;
+  filter: blur(16px);
+}
+
+/* Card content container to ensure it stays above blobs */
+.stat-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Clickable arrow button */
+.stat-card-arrow-link {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  z-index: 3;
+  display: inline-flex;
+}
+
+.stat-card-arrow-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.stat-card-arrow-btn:hover {
+  background: #000000;
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
 /* ============================================
