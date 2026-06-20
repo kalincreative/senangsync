@@ -24,6 +24,7 @@ import {
   Palette,
   Layers,
   Mail,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -707,6 +708,55 @@ export default function DashboardPage() {
                   <span style={{ color: "#000000" }}>{lang === "bm" ? "Tambah Produk" : "Add Product"}</span>
                 </Link>
               </div>
+            </div>
+          </div>
+
+          {/* Workspace Storage Card */}
+          <div 
+            className="card relative overflow-hidden transition-all duration-300" 
+            style={{ 
+              background: "var(--color-surface)", 
+              padding: "1.25rem", 
+              border: "none",
+              boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)",
+              display: "flex", 
+              flexDirection: "column" 
+            }}
+          >
+            {/* Header & Chevron */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--color-text-muted)" }}>
+                {lang === "bm" ? "Penyimpanan Ruang Kerja" : "Workspace Storage"}
+              </span>
+              <ChevronRight size={16} style={{ color: "var(--color-text-muted)", opacity: 0.6 }} />
+            </div>
+
+            {/* Main Stat & Progress */}
+            <div style={{ display: "flex", alignItems: "baseline", gap: "0.75rem", marginTop: "0.5rem" }}>
+              <span style={{ fontSize: "2rem", fontWeight: 800, color: "var(--color-text-primary)" }}>88%</span>
+              <span style={{ fontSize: "0.875rem", color: "var(--color-text-muted)" }}>4.4 GB / 5 GB Used</span>
+            </div>
+
+            {/* The Progress Bar */}
+            <div style={{ width: "100%", height: "10px", backgroundColor: "rgba(15, 23, 42, 0.05)", borderRadius: "9999px", marginTop: "1rem", overflow: "hidden" }}>
+              <div style={{ width: "88%", height: "100%", backgroundColor: "#ef4444", borderRadius: "9999px" }} />
+            </div>
+
+            {/* Category Breakdown (Bottom Section) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginTop: "1.25rem" }}>
+              {[
+                { name: lang === "bm" ? "Dokumen" : "Documents", amount: "2.1 GB", color: "#3b82f6" },
+                { name: lang === "bm" ? "Imej" : "Images", amount: "1.5 GB", color: "#10b981" },
+                { name: lang === "bm" ? "Lain-lain" : "Others", amount: "800 MB", color: "#f59e0b" }
+              ].map((item, idx) => (
+                <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.875rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: item.color, display: "inline-block" }} />
+                    <span style={{ color: "var(--color-text-muted)" }}>{item.name}</span>
+                  </div>
+                  <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{item.amount}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
