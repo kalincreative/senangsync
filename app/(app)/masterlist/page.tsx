@@ -60,7 +60,7 @@ export default function MasterlistPage() {
 
         {/* Folder header card */}
         <div
-          className="bg-[#0056b3] text-white rounded-2xl"
+          className="bg-[#003087] text-white rounded-2xl"
           style={{
             padding: "1.5rem",
             marginBottom: "1.5rem",
@@ -265,7 +265,7 @@ export default function MasterlistPage() {
             {lang === "bm" ? "Folder Baru" : "New Folder"}
           </button>
           <button 
-            className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-none"
+            className="btn btn-sm bg-[#003087] hover:bg-[#002266] text-white border-none"
           >
             <Plus size={15} />
             {lang === "bm" ? "Muat Naik Fail" : "Upload File"}
@@ -328,7 +328,7 @@ export default function MasterlistPage() {
             >
               {/* 1. Back Tab */}
               <div 
-                className="absolute top-0 left-3.5 w-[38%] h-[22%] bg-[#003594] rounded-t-xl transition-all duration-300 group-hover:bg-[#002b7a]"
+                className="absolute top-0 left-3.5 w-[38%] h-[22%] bg-[#003087] rounded-t-xl transition-all duration-300 group-hover:bg-[#002266]"
               />
               
               {/* 2. Inner Paper Sheet */}
@@ -341,18 +341,20 @@ export default function MasterlistPage() {
 
               {/* 3. Front Cover */}
               <div 
-                className="absolute bottom-0 left-0 w-full h-[78%] bg-[#0056b3] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] px-6 pt-7 pb-5 flex flex-col justify-center text-left transition-all duration-300 group-hover:bg-[#004ca0] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
+                className="absolute bottom-0 left-0 w-full h-[78%] bg-[#003087] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] flex flex-col justify-center transition-all duration-300 group-hover:bg-[#002266] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
               >
                 {/* Chevron icon */}
                 <div className="absolute top-4 right-4 text-white/50 group-hover:text-white transition-colors">
                   <ChevronRight size={16} />
                 </div>
                 
-                <div className="text-white font-bold text-[1.125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
-                  {folder.name}
-                </div>
-                <div className="text-blue-200 text-[0.6875rem] font-bold uppercase tracking-wider mt-1.5">
-                  {folder.resourceCount} {lang === "bm" ? "ASET" : "ASSETS"}
+                <div className="p-6 flex flex-col text-left">
+                  <div className="text-white font-bold text-[1.125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
+                    {folder.name}
+                  </div>
+                  <div className="text-blue-200 text-[0.6875rem] font-bold uppercase tracking-wider mt-1.5">
+                    {folder.resourceCount} {lang === "bm" ? "ASET" : "ASSETS"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -411,11 +413,11 @@ export default function MasterlistPage() {
                   </div>
                 </div>
 
-                {/* Quick Actions Group */}
-                <div className="flex items-center gap-1 mr-1">
+                {/* Right-aligned Actions Group */}
+                <div className="flex items-center gap-4">
                   {resource.type === "link" ? (
                     <button 
-                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                      className="p-2 rounded-md text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
                       title={lang === "bm" ? "Salin Pautan" : "Copy Link"}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -425,7 +427,7 @@ export default function MasterlistPage() {
                     </button>
                   ) : (
                     <button 
-                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                      className="p-2 rounded-md text-gray-400 hover:text-blue-600 hover:bg-gray-100 transition-colors"
                       title={lang === "bm" ? "Muat Turun" : "Download"}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -436,7 +438,7 @@ export default function MasterlistPage() {
                   )}
                   
                   <button 
-                    className="p-2 rounded-lg text-gray-400 hover:text-green-500 hover:bg-green-50 transition-colors"
+                    className="p-2 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-50 transition-colors"
                     title={lang === "bm" ? "Kongsi WhatsApp" : "Share WhatsApp"}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -444,16 +446,16 @@ export default function MasterlistPage() {
                   >
                     <Share2 size={15} />
                   </button>
-                </div>
 
-                <button 
-                  className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <MoreVertical size={16} />
-                </button>
+                  <button 
+                    className="p-2 rounded-md text-gray-400 hover:bg-gray-100 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <MoreVertical size={16} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
