@@ -1,0 +1,239 @@
+SenangSync — Project Brief
+
+ 1. Problem Statement
+
+
+"Your business is everywhere. SenangSync puts it in one place."
+
+
+
+Malaysian SME owners waste hours every week hunting for business documents, links, subscriptions, and product info scattered across WhatsApp, Google Drive, Notes, and Canva — SenangSync puts everything in one place so you can find anything in seconds.
+
+The Pain Points
+
+
+Brand kit stored in Canva, nowhere else
+Important docs (SSM, bank statements, certs) scattered across Google Drive folders
+Subscription list tracked in WhatsApp notes or phone Notes app
+Business links (website, payment form, Google Form, sales page) saved everywhere
+Product prices and sales links have no single source of truth
+
+
+
+2. What Is SenangSync?
+
+SenangSync is a Business Operating System (Business OS) built specifically for Malaysian SME founders, freelancers, and creative consultants. It is a centralized workspace where everything a business needs to operate — documents, links, subscriptions, and products — lives in one place.
+
+Think of it as "Google for your business" — you open it, you search, you get the thing.
+
+Target Users
+
+
+Malaysian SME founders and solopreneurs
+Creative agency owners and consultants
+Digital product sellers (courses, templates, SaaS)
+Freelancers managing multiple clients and subscriptions
+
+
+
+3. Core MVP Modules
+
+3.1 Resource Masterlist ⭐ Hero Feature
+
+Central file and link repository — the single source of truth for all business documents and links.
+
+FeatureDescriptionFolder organisationCreate named folders with auto-assigned flag colorsUpload documentsUpload files up to 50MB per fileSave external linksStore URLs with name and descriptionOne-tap copy / downloadInstant copy link or download fileDocument expiry remindersAlert before SSM cert, HRDC cert, licenses expireGlobal searchSearch by filename, tag, or folder nameFolder color systemAuto-assigned from active theme palette; user can manually override
+
+3.2 Subscription Tracker
+
+Track all recurring business expenses and SaaS tools in one view.
+
+FeatureDescriptionAdd / edit subscriptionsService name, category, cost, billing sourceMonthly burn totalTotal RM spend per monthCategory breakdownUtilities, Design, Marketing, Production, WebsiteRenewal date trackingTrack next billing date per subscriptionPush notification alertMobile push alert 7 days before renewal (PWA)CSV exportExport full subscription list
+
+3.3 Product Catalog
+
+Single source of truth for all products, services, and digital offerings.
+
+FeatureDescriptionAdd product / serviceName, tagline, descriptionPricingDefault price in RMSales page linkExternal storefront or checkout URLProduct thumbnailUpload cover imageCategory filterPhysical, digital, serviceProduct type tagFilter and organize by type
+
+
+4. Supporting Features (MVP)
+
+4.1 Dashboard
+
+
+Business overview at a glance
+Monthly burn summary
+Active subscription count
+Product count
+Quick actions (add resource, subscription, product)
+BM / BI language toggle — directly on the Dashboard, no need to go to Settings
+Command Bar (Cmd+K / Ctrl+K) — search across all modules instantly, available on every page, featured prominently on Dashboard
+
+
+4.2 PWA + Push Notifications
+
+
+Installable as Progressive Web App (add to home screen on Android & iOS)
+Mobile push notifications — primary use case is mobile; users will be on phone most of the time
+Push via OneSignal (Web Push API)
+Subscription renewal alerts (7 days before)
+Document expiry alerts
+Prompt user to enable notifications on first install
+
+
+4.3 Mobile-Optimized UI
+
+
+Fully responsive, mobile-first layout — not just "works on mobile" but designed for it
+Bottom navigation bar on mobile (thumb-friendly)
+Touch-optimized tap targets (min 44px)
+Swipe gestures for quick actions where applicable
+Fast load time — PWA caching for offline-ready key screens
+
+
+4.4 WhatsApp Share
+
+
+Share docs and links directly via WhatsApp from Masterlist
+One-tap "Kongsi via WhatsApp" button on each resource
+Useful when sending docs or links to clients or team members
+
+
+4.5 Analytics
+
+
+Spending trends over time (monthly burn history)
+Budget tracking (set monthly budget, track against it)
+Burn rate changes month-over-month
+Category spend breakdown (visual chart)
+
+
+4.6 Workspace Settings
+
+
+Workspace name and default currency (MYR)
+Team management: invite members, assign roles (Admin / Member)
+Theme selection: Malaysian default + state flag themes
+Security settings
+
+
+
+5. Post-MVP Features (v2)
+
+FeatureDescriptionBrand AssetsLogo vault, color palette, typography hierarchyTestimonial BankSocial proof archive with verifiable proof imageMore negeri themesExpand state flag theme coverage to all 13 states + 3 territories
+
+
+6. Design System
+
+6.1 Design Philosophy
+
+
+Local first — feels made for Malaysians, not translated for them
+Fast retrieval — every interaction optimised for finding things quickly
+Mobile first — design for phone screen first, scale up to desktop
+Clean, not generic — avoid default Shadcn/v0 AI-generated aesthetic
+Kedai runcit test — if a 35-year-old Malay SME owner in Klang opened this, they should feel it was built for them
+
+
+6.2 Typography
+
+
+Heading: Plus Jakarta Sans (600, 700)
+Body: Plus Jakarta Sans (400, 500)
+Avoid Inter — too overused in AI-generated UI
+
+
+6.3 Theme System
+
+Default Theme — Malaysia
+
+The default theme on first load uses the main Malaysian flag colors. Every new user starts here before choosing a state theme.
+
+TokenColorUsagePrimary#CC0001 (Merah Jalur Gemilang)Buttons, active states, accentsSecondary#F4C542 (Kuning Bintang)Highlights, folder accentsDark#003087 (Biru Bendera)Dark mode base, sidebarNeutral#FFFFFF / #F8F8F8Backgrounds, cards
+
+State Flag Themes (User-Selected)
+
+After onboarding, users can switch to their negeri theme in Settings. The entire UI adapts.
+
+NegeriPrimarySecondaryGradient DirectionSelangor#C8102E (Merah)#F4C542 (Kuning)Gold → RedPenang#003087 (Biru)#F7A81B (Kuning)Blue → AmberSabah#1B2A47 (Navy)#00A3E0 (Biru)Navy → Sky BlueJohor#003087 (Biru)#C8102E (Merah)Navy → RedKelantan#CC0001 (Merah)#8B0000 (Maroon)Red → Deep Red(More states in v2)
+
+6.4 Folder Color Logic
+
+
+Folders auto-assigned colors from active theme palette (rotating order)
+No two adjacent folders share the same color
+User can manually override color when editing a folder
+Gradient style: single color, lighter shade at top → solid at bottom
+Text on dark folders: white. Text on yellow/gold folders: dark brown
+
+
+6.5 Icon Strategy
+
+
+Use animated icons from pqoqubbw/icons
+
+GitHub: https://github.com/pqoqubbw/icons
+Live preview: https://lucide-animated.com
+
+
+
+Built with Framer Motion — subtle, smooth animations on hover/interaction
+Icon color follows active theme primary color (same as TNG eWallet approach)
+Icons tinted to brand/flag color, not plain black
+Sidebar navigation: use the same animated icon set for consistency
+
+
+6.6 Language Toggle
+
+
+BM / BI toggle lives directly on the Dashboard — accessible at all times, no need to go into Settings
+BM is the default language
+Toggle persists per user session (saved to user preferences in Supabase)
+BM copy: natural, conversational ("Folder baru", "Semua clear!", "Jom tambah!")
+BI copy: clean professional English
+Empty states are encouraging and contextual — not generic "No data found"
+Toast messages have personality ("Copied! Senang kan?" / "Copied! Easy right?")
+
+
+
+7. Tech Stack
+
+LayerTechnologyIDEAntigravityFrameworkNext.js (App Router)DatabaseSupabase (PostgreSQL)AuthSupabase Auth (Google SSO + email/password)StorageSupabase Storage (file uploads)StylingTailwind CSSDeploymentVercelVersion ControlGitHubPush NotificationsOneSignal (Web Push API) — mobile primaryPWANext.js PWA config (manifest + service worker)Animated Iconspqoqubbw/icons (Framer Motion) — https://github.com/pqoqubbw/icons
+
+Supabase Schema (Core Tables)
+
+
+workspaces — workspace config, name, currency, theme, language preference
+users — user profiles, role per workspace
+folders — folder name, color, workspace_id
+resources — files and links, folder_id, type (document/link), expiry_date
+subscriptions — service name, cost, category, renewal_date, billing_source
+products — name, price, category, thumbnail_url, external_link
+
+
+
+8. Key Principles for Rebuild
+
+
+Depth over breadth — 3 core modules done perfectly beats 6 done averagely
+Retrieval speed is the product — everything optimised for finding things fast
+Mobile first — design for phone, enhance for desktop; Malaysian SMEs live on their phones
+Local by default — BM as default language, MYR as default currency, Malaysia flag as default theme
+Command Bar everywhere — Cmd+K available on every page, not just Dashboard
+Auto-assign, allow override — reduce friction on creation, allow customisation later
+Language toggle on Dashboard — always one tap away, never buried in settings
+
+
+
+9. Milestones (Suggested)
+
+PhaseScopeGoalPhase 0 — SetupRepo, Supabase, Vercel, auth flowWorking login + workspace creationPhase 1 — CoreMasterlist + basic folder/file/link CRUDUsers can store and retrieve docsPhase 2 — TrackSubscription Tracker + Dashboard overviewUsers can see monthly burnPhase 3 — CatalogProduct Catalog + searchUsers can manage product listPhase 4 — PWAPWA install + mobile push notificationsApp installable on phone, alerts workingPhase 5 — PolishThemes, BM/BI toggle on dashboard, command bar, animated icons, WhatsApp share, analyticsFeels like a complete local productPhase 6 — LaunchBeta users, feedback loopReal SMEs using it daily
+
+
+10. Problem → Solution Summary
+
+ProblemSenangSync SolutionSSM cert ada dalam email jeUpload to Masterlist → download anytimeLink payment form saved kat notesSave as link in Masterlist → one-tap copyTak ingat berapa subscription bayar sebulanSubscription Tracker → total burn dashboardLupa Canva subscription nak renewMobile push notification 7 hari awalTak tahu harga produk sendiriProduct Catalog → price + sales link in one placeTeam tak tahu mana nak cari dokumenShared workspace → everyone access same MasterlistNak share doc dengan client via WAOne-tap Kongsi via WhatsApp dari Masterlist
+
+
+SenangSync v2.0 — Built in Malaysia, untuk Malaysia.

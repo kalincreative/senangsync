@@ -1,0 +1,43 @@
+{
+  "name": "SenangSync",
+  "short_name": "SenangSync",
+  "description": "Business OS untuk Malaysian SME — dokumen, link, langganan, dan produk dalam satu tempat.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#CC0001",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
+  "lang": "ms",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "Papan pemuka bisnes"
+    },
+    {
+      "name": "Masterlist",
+      "url": "/masterlist",
+      "description": "Dokumen dan link"
+    },
+    {
+      "name": "Langganan",
+      "url": "/subscriptions",
+      "description": "Pelacak langganan"
+    }
+  ]
+}
