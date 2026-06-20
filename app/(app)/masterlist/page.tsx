@@ -140,7 +140,7 @@ export default function MasterlistPage() {
                       }}
                     >
                       {resource.type === "link" ? (
-                        <Link2 size={18} color="var(--color-dark)" style={{ filter: "brightness(2.5)" }} />
+                        <Link2 size={18} color="var(--color-dark)" />
                       ) : (
                         <FileText size={18} color="var(--color-primary)" />
                       )}
@@ -428,7 +428,7 @@ export default function MasterlistPage() {
                   }}
                 >
                   {resource.type === "link" ? (
-                    <Link2 size={14} color="var(--color-dark)" style={{ filter: "brightness(2.5)" }} />
+                    <Link2 size={14} color="var(--color-dark)" />
                   ) : (
                     <FileText size={14} color="var(--color-primary)" />
                   )}

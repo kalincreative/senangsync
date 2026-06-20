@@ -27,16 +27,28 @@ const CATEGORY_ICONS: Record<ProductCategory, React.ReactNode> = {
   service: <Wrench size={16} />,
 };
 
-const CATEGORY_COLORS: Record<ProductCategory, { bg: string; color: string }> = {
-  physical: { bg: "rgba(34,197,94,0.12)", color: "#22c55e" },
-  digital: { bg: "rgba(168,85,247,0.12)", color: "#a855f7" },
-  service: { bg: "rgba(245,158,11,0.12)", color: "#f59e0b" },
+const CATEGORY_COLORS: Record<ProductCategory, { bg: string; bgGradientStart: string; color: string }> = {
+  physical: {
+    bg: "color-mix(in srgb, var(--color-dark) 10%, transparent)",
+    bgGradientStart: "color-mix(in srgb, var(--color-dark) 25%, transparent)",
+    color: "var(--color-dark)",
+  },
+  digital: {
+    bg: "color-mix(in srgb, var(--color-primary) 10%, transparent)",
+    bgGradientStart: "color-mix(in srgb, var(--color-primary) 25%, transparent)",
+    color: "var(--color-primary)",
+  },
+  service: {
+    bg: "color-mix(in srgb, var(--color-secondary) 15%, transparent)",
+    bgGradientStart: "color-mix(in srgb, var(--color-secondary) 30%, transparent)",
+    color: "var(--color-secondary)",
+  },
 };
 
 const STATUS_COLORS: Record<ProductStatus, { bg: string; color: string }> = {
-  active: { bg: "rgba(34,197,94,0.1)", color: "#22c55e" },
-  draft: { bg: "rgba(245,158,11,0.1)", color: "#f59e0b" },
-  archived: { bg: "rgba(107,114,128,0.1)", color: "#6b7280" },
+  active: { bg: "color-mix(in srgb, var(--color-success) 10%, transparent)", color: "var(--color-success)" },
+  draft: { bg: "color-mix(in srgb, var(--color-warning) 10%, transparent)", color: "var(--color-warning)" },
+  archived: { bg: "color-mix(in srgb, var(--color-text-muted) 10%, transparent)", color: "var(--color-text-muted)" },
 };
 
 export default function ProductsPage() {
@@ -206,7 +218,7 @@ export default function ProductsPage() {
                 <div
                   style={{
                     height: 120,
-                    background: `linear-gradient(135deg, ${catStyle.bg.replace("0.12", "0.3")}, ${catStyle.bg})`,
+                    background: `linear-gradient(135deg, ${catStyle.bgGradientStart}, ${catStyle.bg})`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -220,7 +232,7 @@ export default function ProductsPage() {
                       height: 56,
                       borderRadius: "var(--radius-xl)",
                       background: catStyle.bg,
-                      border: `2px solid ${catStyle.color}40`,
+                      border: `2px solid color-mix(in srgb, ${catStyle.color} 30%, transparent)`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

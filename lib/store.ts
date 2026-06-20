@@ -96,11 +96,11 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "senangsync-app-store",
-      partialState: (state) => ({
+      partialize: (state) => ({
         activeWorkspaceId: state.activeWorkspaceId,
         theme: state.theme,
         lang: state.lang,
       }),
-    } as Parameters<typeof persist>[1]
+    }
   )
 );

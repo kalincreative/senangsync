@@ -32,12 +32,12 @@ const CATEGORIES: SubscriptionCategory[] = [
 ];
 
 const CATEGORY_COLORS: Record<SubscriptionCategory, string> = {
-  utilities: "#3b82f6",
-  design: "#a855f7",
-  marketing: "#f59e0b",
-  production: "#22c55e",
-  website: "#06b6d4",
-  other: "#6b7280",
+  utilities: "var(--color-dark)",
+  design: "var(--color-primary)",
+  marketing: "var(--color-secondary)",
+  production: "var(--color-text-secondary)",
+  website: "var(--color-info)",
+  other: "var(--color-text-muted)",
 };
 
 export default function SubscriptionsPage() {
@@ -294,12 +294,12 @@ export default function SubscriptionsPage() {
                       width: 44,
                       height: 44,
                       borderRadius: "var(--radius-md)",
-                      background: `${CATEGORY_COLORS[sub.category]}18`,
+                      background: `color-mix(in srgb, ${CATEGORY_COLORS[sub.category]} 10%, transparent)`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
-                      border: `1px solid ${CATEGORY_COLORS[sub.category]}30`,
+                      border: `1px solid color-mix(in srgb, ${CATEGORY_COLORS[sub.category]} 20%, transparent)`,
                     }}
                   >
                     <CreditCard size={18} color={CATEGORY_COLORS[sub.category]} />
@@ -330,9 +330,9 @@ export default function SubscriptionsPage() {
                           <span
                             className="badge"
                             style={{
-                              background: `${CATEGORY_COLORS[sub.category]}18`,
+                              background: `color-mix(in srgb, ${CATEGORY_COLORS[sub.category]} 10%, transparent)`,
                               color: CATEGORY_COLORS[sub.category],
-                              borderColor: `${CATEGORY_COLORS[sub.category]}30`,
+                              borderColor: `color-mix(in srgb, ${CATEGORY_COLORS[sub.category]} 20%, transparent)`,
                               border: "1px solid",
                             }}
                           >
