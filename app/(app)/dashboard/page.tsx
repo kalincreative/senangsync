@@ -717,6 +717,7 @@ export default function DashboardPage() {
             style={{ 
               background: "var(--color-surface)", 
               padding: "1.25rem", 
+              flexGrow: 1,
               display: "flex", 
               flexDirection: "column" 
             }}
@@ -728,10 +729,10 @@ export default function DashboardPage() {
             <div className="relative z-10 flex flex-col flex-grow h-full">
               {/* Header & Chevron */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--color-text-muted)" }}>
+                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#000000" }}>
                   {lang === "bm" ? "Penyimpanan Ruang Kerja" : "Workspace Storage"}
                 </span>
-                <ChevronRight size={16} style={{ color: "var(--color-text-muted)", opacity: 0.6 }} />
+                <ChevronRight size={16} style={{ color: "#000000", opacity: 0.6 }} />
               </div>
 
               {/* Main Stat & Progress */}
@@ -744,6 +745,9 @@ export default function DashboardPage() {
               <div style={{ width: "100%", height: "10px", backgroundColor: "rgba(15, 23, 42, 0.05)", borderRadius: "9999px", marginTop: "1rem", overflow: "hidden" }}>
                 <div style={{ width: "88%", height: "100%", backgroundColor: "#ef4444", borderRadius: "9999px" }} />
               </div>
+
+              {/* Spacer to push breakdown to the bottom */}
+              <div style={{ flex: 1, minHeight: "1rem" }} />
 
               {/* Category Breakdown (Bottom Section) */}
               <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginTop: "1.25rem" }}>
