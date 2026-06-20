@@ -60,7 +60,7 @@ export default function MasterlistPage() {
 
         {/* Folder header card */}
         <div
-          className={`folder-card ${activeFolder.colorClass}`}
+          className="bg-[#0056b3] text-white rounded-2xl"
           style={{
             padding: "1.5rem",
             marginBottom: "1.5rem",
@@ -315,31 +315,47 @@ export default function MasterlistPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-            gap: "1rem",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "1.25rem",
           }}
         >
           {filteredFolders.map((folder) => (
-            <button
+            <div 
               key={folder.id}
               onClick={() => setActiveFolder(folder)}
-              className="bg-white border border-gray-100 rounded-2xl p-6 transition-all duration-300 ease-in-out cursor-pointer group hover:bg-blue-600 hover:shadow-lg hover:-translate-y-1 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] text-left w-full flex flex-col justify-between"
-              style={{
-                aspectRatio: "1 / 0.85",
-              }}
+              className="relative w-full cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.02] group"
+              style={{ aspectRatio: "1 / 0.78" }}
             >
-              <div className="flex justify-end w-full mb-3">
-                <ChevronRight size={16} className="text-gray-400 group-hover:text-white/60 transition-colors" />
+              {/* 1. Back Tab */}
+              <div 
+                className="absolute top-0 left-3.5 w-[38%] h-[22%] bg-[#003594] rounded-t-xl transition-all duration-300 group-hover:bg-[#002b7a]"
+              />
+              
+              {/* 2. Inner Paper Sheet */}
+              <div 
+                className="absolute top-[8%] left-[4%] w-[92%] h-[80%] bg-white border border-gray-100 rounded-t-xl shadow-sm transition-all duration-300"
+              >
+                {/* Decorative sheet bar */}
+                <div className="w-[80%] h-1.5 bg-gray-100 rounded-full mx-auto mt-2.5 opacity-60" />
               </div>
-              <div>
-                <div className="text-gray-900 group-hover:text-white font-bold text-lg transition-colors mb-1 leading-snug">
+
+              {/* 3. Front Cover */}
+              <div 
+                className="absolute bottom-0 left-0 w-full h-[76%] bg-[#0056b3] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] p-5 flex flex-col justify-end text-left transition-all duration-300 group-hover:bg-[#004ca0] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
+              >
+                {/* Chevron icon */}
+                <div className="absolute top-4 right-4 text-white/50 group-hover:text-white transition-colors">
+                  <ChevronRight size={16} />
+                </div>
+                
+                <div className="text-white font-bold text-[1.125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
                   {folder.name}
                 </div>
-                <div className="text-gray-500 group-hover:text-blue-100 text-xs transition-colors">
-                  {folder.resourceCount} {copy.masterlist.resources[lang]}
+                <div className="text-blue-200 text-[0.6875rem] font-bold uppercase tracking-wider mt-1">
+                  {folder.resourceCount} {lang === "bm" ? "ASET" : "ASSETS"}
                 </div>
               </div>
-            </button>
+            </div>
           ))}
         </div>
       )}
