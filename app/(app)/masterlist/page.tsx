@@ -341,14 +341,22 @@ export default function MasterlistPage() {
 
               {/* 3. Front Cover */}
               <div 
-                className="absolute bottom-0 left-0 w-full h-[78%] bg-[#003087] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] flex flex-col justify-center transition-all duration-300 group-hover:bg-[#002266] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
+                className="absolute bottom-0 left-0 w-full h-[78%] bg-[#003087] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] flex flex-col justify-end transition-all duration-300 group-hover:bg-[#002266] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
               >
                 {/* Chevron icon */}
                 <div className="absolute top-4 right-4 text-white/50 group-hover:text-white transition-colors">
                   <ChevronRight size={16} />
                 </div>
                 
-                <div className="p-6 flex flex-col text-left">
+                <div 
+                  style={{
+                    paddingLeft: "1.75rem",
+                    paddingRight: "1.5rem",
+                    paddingBottom: "1.5rem",
+                    paddingTop: "2.5rem",
+                  }}
+                  className="flex flex-col text-left"
+                >
                   <div className="text-white font-bold text-[1.125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
                     {folder.name}
                   </div>
