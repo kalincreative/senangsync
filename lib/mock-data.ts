@@ -42,6 +42,7 @@ export interface Resource {
   tags: string[];
   createdAt: string;
   workspaceId: string;
+  previewUrl?: string;
 }
 
 export interface Subscription {
@@ -162,6 +163,42 @@ export const MOCK_FOLDERS: Folder[] = [
     resourceCount: 24,
     workspaceId: "ws-1",
     updatedAt: "2026-06-19",
+  },
+  {
+    id: "f-7",
+    name: "R&D Produk",
+    color: "#003087",
+    colorClass: "folder-malaysia-3",
+    resourceCount: 0,
+    workspaceId: "ws-1",
+    updatedAt: "2026-06-18",
+  },
+  {
+    id: "f-8",
+    name: "Operasi Syarikat",
+    color: "#8a0001",
+    colorClass: "folder-malaysia-4",
+    resourceCount: 4,
+    workspaceId: "ws-1",
+    updatedAt: "2026-06-17",
+  },
+  {
+    id: "f-9",
+    name: "Sumber Manusia",
+    color: "#CC0001",
+    colorClass: "folder-malaysia-1",
+    resourceCount: 2,
+    workspaceId: "ws-1",
+    updatedAt: "2026-06-16",
+  },
+  {
+    id: "f-10",
+    name: "Feedback Pelanggan",
+    color: "#F4C542",
+    colorClass: "folder-malaysia-2",
+    resourceCount: 7,
+    workspaceId: "ws-1",
+    updatedAt: "2026-06-15",
   },
 ];
 

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAppStore } from "@/lib/store";
 import { copy, formatDate } from "@/lib/copy";
 import {
   MOCK_FOLDERS,
   MOCK_RESOURCES,
   type Folder,
+  type Resource,
 } from "@/lib/mock-data";
 import {
   FolderOpen,
@@ -17,25 +18,142 @@ import {
   Download,
   Copy,
   Share2,
-  ChevronRight,
   ArrowLeft,
   Clock,
   AlertTriangle,
   MoreVertical,
   ExternalLink,
+  X,
 } from "lucide-react";
+import { CreateFolderModal } from "@/components/CreateFolderModal";
+import { UploadResourceModal } from "@/components/UploadResourceModal";
+import { PreviewResourceModal } from "@/components/PreviewResourceModal";
+import { EditResourceModal } from "@/components/EditResourceModal";
 
 export default function MasterlistPage() {
   const { lang } = useAppStore();
+  const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS);
+  const [resources, setResources] = useState<Resource[]>(MOCK_RESOURCES);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFolder, setActiveFolder] = useState<Folder | null>(null);
 
-  const filteredFolders = MOCK_FOLDERS.filter((f) =>
+  const filteredFolders = folders.filter((f) =>
     f.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleFolderCreated = (name: string) => {
+    const newFolder: Folder = {
+      id: `f-${Date.now()}`,
+      name: name,
+      color: "#003087", // Unified theme color
+      colorClass: "folder-malaysia-3",
+      resourceCount: 0,
+      workspaceId: "ws-1",
+      updatedAt: new Date().toISOString().split("T")[0],
+    };
+
+    setFolders([newFolder, ...folders]);
+  };
+
+  const handleResourceAdded = (newResource: Resource) => {
+    setResources([newResource, ...resources]);
+    
+    // Update the folder's resourceCount
+    setFolders(folders.map(f => {
+      if (f.id === newResource.folderId) {
+        return { ...f, resourceCount: f.resourceCount + 1 };
+      }
+      return f;
+    }));
+
+    // If activeFolder is open, update activeFolder state to reflect the new resourceCount
+    if (activeFolder && activeFolder.id === newResource.folderId) {
+      setActiveFolder(prev => prev ? { ...prev, resourceCount: prev.resourceCount + 1 } : null);
+    }
+  };
+
+  const [previewingResource, setPreviewingResource] = useState<Resource | null>(null);
+  const [editingResource, setEditingResource] = useState<Resource | null>(null);
+  const [activeMenuResourceId, setActiveMenuResourceId] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setActiveMenuResourceId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleDeleteResource = (resourceId: string) => {
+    const resourceToDelete = resources.find((r) => r.id === resourceId);
+    if (!resourceToDelete) return;
+
+    setResources(resources.filter((r) => r.id !== resourceId));
+
+    // Decrement the folder's resourceCount
+    setFolders(
+      folders.map((f) => {
+        if (f.id === resourceToDelete.folderId) {
+          return { ...f, resourceCount: Math.max(0, f.resourceCount - 1) };
+        }
+        return f;
+      })
+    );
+
+    // If activeFolder is open, update activeFolder state to reflect the decremented resourceCount
+    if (activeFolder && activeFolder.id === resourceToDelete.folderId) {
+      setActiveFolder((prev) =>
+        prev ? { ...prev, resourceCount: Math.max(0, prev.resourceCount - 1) } : null
+      );
+    }
+  };
+
+  const handleResourceUpdated = (resourceId: string, updatedFields: Partial<Resource>) => {
+    const oldResource = resources.find((r) => r.id === resourceId);
+    if (!oldResource) return;
+
+    setResources(
+      resources.map((r) => {
+        if (r.id === resourceId) {
+          return { ...r, ...updatedFields };
+        }
+        return r;
+      })
+    );
+
+    // Handle folder movement count update if folderId changed
+    if (updatedFields.folderId && updatedFields.folderId !== oldResource.folderId) {
+      setFolders(
+        folders.map((f) => {
+          if (f.id === oldResource.folderId) {
+            return { ...f, resourceCount: Math.max(0, f.resourceCount - 1) };
+          }
+          if (f.id === updatedFields.folderId) {
+            return { ...f, resourceCount: f.resourceCount + 1 };
+          }
+          return f;
+        })
+      );
+
+      if (activeFolder) {
+        if (activeFolder.id === oldResource.folderId) {
+          setActiveFolder((prev) =>
+            prev ? { ...prev, resourceCount: Math.max(0, prev.resourceCount - 1) } : null
+          );
+        } else if (activeFolder.id === updatedFields.folderId) {
+          setActiveFolder((prev) =>
+            prev ? { ...prev, resourceCount: prev.resourceCount + 1 } : null
+          );
+        }
+      }
+    }
+  };
+
   const folderResources = activeFolder
-    ? MOCK_RESOURCES.filter((r) => r.folderId === activeFolder.id)
+    ? resources.filter((r) => r.folderId === activeFolder.id)
     : [];
 
   // Folder detail view
@@ -80,20 +198,27 @@ export default function MasterlistPage() {
               {folderResources.length} {copy.masterlist.resources[lang]}
             </p>
           </div>
-          <button
-            className="btn"
-            style={{
-              background: "rgba(255,255,255,0.2)",
-              color: "inherit",
-              backdropFilter: "blur(8px)",
-              border: "1px solid rgba(255,255,255,0.25)",
-              gap: "0.375rem",
-              fontSize: "0.8125rem",
-            }}
-          >
-            <Plus size={16} />
-            {lang === "bm" ? "Tambah" : "Add"}
-          </button>
+          <UploadResourceModal 
+            onResourceAdded={handleResourceAdded}
+            folders={folders}
+            activeFolderId={activeFolder.id}
+            triggerButton={
+              <button
+                className="btn"
+                style={{
+                  background: "rgba(255,255,255,0.2)",
+                  color: "inherit",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  gap: "0.375rem",
+                  fontSize: "0.8125rem",
+                }}
+              >
+                <Plus size={16} />
+                {lang === "bm" ? "Tambah" : "Add"}
+              </button>
+            }
+          />
         </div>
 
         {/* Resource list */}
@@ -258,18 +383,11 @@ export default function MasterlistPage() {
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem" }}>
-          <button 
-            className="btn btn-secondary btn-sm"
-          >
-            <Plus size={15} />
-            {lang === "bm" ? "Folder Baru" : "New Folder"}
-          </button>
-          <button 
-            className="btn btn-sm bg-[#003087] hover:bg-[#002266] text-white border-none"
-          >
-            <Plus size={15} />
-            {lang === "bm" ? "Muat Naik Fail" : "Upload File"}
-          </button>
+          <CreateFolderModal onFolderCreated={handleFolderCreated} />
+          <UploadResourceModal 
+            onResourceAdded={handleResourceAdded}
+            folders={folders}
+          />
         </div>
       </div>
 
@@ -315,8 +433,8 @@ export default function MasterlistPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: "1.25rem",
+            gridTemplateColumns: "repeat(auto-fill, minmax(145px, 1fr))",
+            gap: "1rem",
           }}
         >
           {filteredFolders.map((folder) => (
@@ -328,39 +446,37 @@ export default function MasterlistPage() {
             >
               {/* 1. Back Tab */}
               <div 
-                className="absolute top-0 left-3.5 w-[38%] h-[22%] bg-[#003087] rounded-t-xl transition-all duration-300 group-hover:bg-[#002266]"
+                className="absolute top-0 left-3.5 w-[38%] h-[22%] bg-[#003087] rounded-t-lg transition-all duration-300 group-hover:bg-[#002266]"
               />
               
               {/* 2. Inner Paper Sheet */}
               <div 
-                className="absolute top-[8%] left-[4%] w-[92%] h-[80%] bg-white border border-gray-100 rounded-t-xl shadow-sm transition-all duration-300"
+                className="absolute top-[8%] left-[4%] w-[92%] h-[82%] bg-white border border-gray-200 rounded-t-lg shadow-[0_-3px_8px_rgba(0,0,0,0.12),_0_2px_4px_rgba(0,0,0,0.06)] transition-all duration-300"
               >
                 {/* Decorative sheet bar */}
-                <div className="w-[80%] h-1.5 bg-gray-100 rounded-full mx-auto mt-2.5 opacity-60" />
+                <div className="w-[80%] h-1 bg-gray-200 rounded-full mx-auto mt-2.5 opacity-60" />
               </div>
 
               {/* 3. Front Cover */}
               <div 
-                className="absolute bottom-0 left-0 w-full h-[78%] bg-[#003087] rounded-[1.25rem] shadow-[0_8px_16px_-4px_rgba(0,32,96,0.18)] flex flex-col justify-end transition-all duration-300 group-hover:bg-[#002266] group-hover:shadow-[0_12px_24px_-4px_rgba(0,32,96,0.25)]"
+                className="absolute bottom-0 left-0 w-full h-[80%] bg-[#003087] rounded-xl shadow-[0_6px_12px_-3px_rgba(0,32,96,0.18)] flex flex-col justify-end transition-all duration-300 group-hover:bg-[#002266] group-hover:shadow-[0_10px_20px_-3px_rgba(0,32,96,0.25)] overflow-hidden"
               >
-                {/* Chevron icon */}
-                <div className="absolute top-4 right-4 text-white/50 group-hover:text-white transition-colors">
-                  <ChevronRight size={16} />
-                </div>
+                {/* Glowing blur blob to create a premium gradient blue-white highlights */}
+                <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/20 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-500" />
                 
                 <div 
                   style={{
-                    paddingLeft: "1.75rem",
-                    paddingRight: "1.5rem",
-                    paddingBottom: "1.5rem",
-                    paddingTop: "2.5rem",
+                    paddingLeft: "1.125rem",
+                    paddingRight: "1rem",
+                    paddingBottom: "1.125rem",
+                    paddingTop: "2rem",
                   }}
                   className="flex flex-col text-left"
                 >
-                  <div className="text-white font-bold text-[1.125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
+                  <div className="text-white font-bold text-[0.8125rem] leading-snug group-hover:scale-[1.01] origin-left transition-all">
                     {folder.name}
                   </div>
-                  <div className="text-blue-200 text-[0.6875rem] font-bold uppercase tracking-wider mt-1.5">
+                  <div className="text-blue-200/90 text-[0.625rem] font-bold uppercase tracking-wider mt-1">
                     {folder.resourceCount} {lang === "bm" ? "ASET" : "ASSETS"}
                   </div>
                 </div>
@@ -371,15 +487,16 @@ export default function MasterlistPage() {
       )}
 
       {/* Recent Resources section */}
-      {MOCK_RESOURCES.length > 0 && (
+      {resources.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "0.875rem" }}>
             {lang === "bm" ? "Ditambah Baru-baru Ini" : "Recently Added"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            {MOCK_RESOURCES.slice(0, 4).map((resource) => (
+            {resources.slice(0, 4).map((resource) => (
               <div
                 key={resource.id}
+                onClick={() => setPreviewingResource(resource)}
                 className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl cursor-pointer hover:bg-gray-50/80 transition-colors"
                 style={{
                   padding: "0.75rem 1rem",
@@ -417,7 +534,7 @@ export default function MasterlistPage() {
                     {resource.name}
                   </div>
                   <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
-                    {MOCK_FOLDERS.find((f) => f.id === resource.folderId)?.name}
+                    {folders.find((f) => f.id === resource.folderId)?.name}
                   </div>
                 </div>
 
@@ -429,6 +546,8 @@ export default function MasterlistPage() {
                       title={lang === "bm" ? "Salin Pautan" : "Copy Link"}
                       onClick={(e) => {
                         e.stopPropagation();
+                        navigator.clipboard.writeText(resource.url || "");
+                        alert(lang === "bm" ? "Pautan disalin!" : "Link copied!");
                       }}
                     >
                       <Copy size={15} />
@@ -439,6 +558,7 @@ export default function MasterlistPage() {
                       title={lang === "bm" ? "Muat Turun" : "Download"}
                       onClick={(e) => {
                         e.stopPropagation();
+                        alert(lang === "bm" ? `Memuat turun ${resource.name}` : `Downloading ${resource.name}`);
                       }}
                     >
                       <Download size={15} />
@@ -450,25 +570,112 @@ export default function MasterlistPage() {
                     title={lang === "bm" ? "Kongsi WhatsApp" : "Share WhatsApp"}
                     onClick={(e) => {
                       e.stopPropagation();
+                      alert(lang === "bm" ? `Berkongsi ${resource.name} di WhatsApp` : `Sharing ${resource.name} on WhatsApp`);
                     }}
                   >
                     <Share2 size={15} />
                   </button>
 
-                  <button 
-                    className="p-2 rounded-md text-gray-400 hover:bg-gray-100 transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                  <div style={{ position: "relative" }}>
+                    <button 
+                      className="p-2 rounded-md text-gray-400 hover:bg-gray-100 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveMenuResourceId(activeMenuResourceId === resource.id ? null : resource.id);
+                      }}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {activeMenuResourceId === resource.id && (
+                      <div
+                        ref={menuRef}
+                        style={{
+                          position: "absolute",
+                          top: "2.25rem",
+                          right: 0,
+                          backgroundColor: "#ffffff",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "0.375rem",
+                          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                          zIndex: 40,
+                          width: "6rem",
+                          padding: "0.25rem",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuResourceId(null);
+                            setEditingResource(resource);
+                          }}
+                          style={{
+                            padding: "0.375rem 0.5rem",
+                            fontSize: "0.75rem",
+                            color: "#334155",
+                            textAlign: "left",
+                            border: "none",
+                            backgroundColor: "transparent",
+                            borderRadius: "0.25rem",
+                            cursor: "pointer",
+                          }}
+                          className="hover:bg-slate-50 text-left w-full"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuResourceId(null);
+                            handleDeleteResource(resource.id);
+                          }}
+                          style={{
+                            padding: "0.375rem 0.5rem",
+                            fontSize: "0.75rem",
+                            color: "#ef4444",
+                            textAlign: "left",
+                            border: "none",
+                            backgroundColor: "transparent",
+                            borderRadius: "0.25rem",
+                            cursor: "pointer",
+                          }}
+                          className="hover:bg-red-50 text-left w-full"
+                        >
+                          {lang === "bm" ? "Padam" : "Delete"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      {/* Preview details modal */}
+      <PreviewResourceModal
+        resource={previewingResource}
+        folderName={folders.find((f) => f.id === previewingResource?.folderId)?.name || ""}
+        lang={lang}
+        isOpen={!!previewingResource}
+        onOpenChange={(open) => {
+          if (!open) setPreviewingResource(null);
+        }}
+      />
+
+      {/* Edit resource modal */}
+      <EditResourceModal
+        resource={editingResource}
+        folders={folders}
+        lang={lang}
+        isOpen={!!editingResource}
+        onOpenChange={(open) => {
+          if (!open) setEditingResource(null);
+        }}
+        onSave={handleResourceUpdated}
+      />
     </div>
   );
 }
